@@ -1,5 +1,7 @@
 import os
 import time
+import decorators
+
 
 class GpioController:
     def __init__(self):
@@ -41,13 +43,19 @@ class GpioController:
         return self.pin_dir(pin) + "/direction"
 
 
-if __name__ == "__main__":
-
-    pin = 25
-
+@decorators.timer
+def test(pin):
     controller = GpioController()
     for _ in range(20):
         controller.on(pin)
         time.sleep(0.2)
         controller.off(pin)
         time.sleep(0.2)
+
+
+if __name__ == "__main__":
+
+    pin = 25
+    test(pin)
+
+
