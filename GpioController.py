@@ -8,10 +8,12 @@ class GpioController:
         self.gpio_path = "/sys/class/gpio/"
         self.export_path = self.gpio_path + "export"
 
+    @decorators.slow_down(0.2)
     def on(self, pin):
         self.initialize_pin(pin)
         self.set_value(pin, 1)
 
+    @decorators.slow_down(0.2)
     def off(self, pin):
         self.initialize_pin(pin)
         self.set_value(pin, 0)
@@ -43,8 +45,12 @@ class GpioController:
         return self.pin_dir(pin) + "/direction"
 
 
+open = decorators.debug(open)
+
+
 @decorators.timer
-def test(pin):
+@decorators.debug
+def pin_test(pin):
     controller = GpioController()
     for _ in range(20):
         controller.on(pin)
@@ -56,6 +62,6 @@ def test(pin):
 if __name__ == "__main__":
 
     pin = 25
-    test(pin)
+    pin_test(pin)
 
 
