@@ -1,5 +1,5 @@
 import os
-
+import time
 
 class GpioController:
     def __init__(self):
@@ -24,14 +24,14 @@ class GpioController:
                 direction.write("out")
 
     def set_value(self, pin, val):
-        with open(self.pin_dir(pin) + "/value") as value:
+        with open(self.pin_dir(pin) + "/value", "w") as value:
             value.write(str(val))
 
     def is_exported(self, pin):
         return os.path.exists(self.pin_dir(pin))
 
     def is_set_to_out(self, pin):
-        with open(self.pin_dir(pin) + "direction", "r") as direction:
+        with open(self.pin_dir(pin) + "/direction", "r") as direction:
             return direction.read() is "out"
 
     def pin_dir(self, pin):
@@ -42,5 +42,12 @@ class GpioController:
 
 
 if __name__ == "__main__":
+
+    pin = 25
+
     controller = GpioController()
-    controller.on(26)
+    for _ in range(20):
+        controller.on(pin)
+        time.sleep(0.2)
+        controller.off(pin)
+        time.sleep(0.2)
