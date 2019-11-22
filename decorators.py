@@ -4,6 +4,7 @@ import time
 
 def timer(func):
     """Print the runtime of the decorated function"""
+
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = time.perf_counter()
@@ -12,11 +13,13 @@ def timer(func):
         run_time = end_time - start_time
         print(f"Finished {func.__name__!r} in {run_time:.4f} secs")
         return value
+
     return wrapper_timer
 
 
 def debug(func):
     """Print the function signature and return value"""
+
     @functools.wraps(func)
     def wrapper_debug(*args, **kwargs):
         args_repr = [repr(a) for a in args]
@@ -26,17 +29,21 @@ def debug(func):
         value = func(*args, **kwargs)
         print(f"{func.__name__!r} returned {value!r}")
         return value
+
     return wrapper_debug
 
 
-def slow_down(_func=None,*, slow_amount=1):
+def slow_down(_func=None, *, slow_amount=1):
     """Sleep <slow_amount> of seconds (1s by default) before calling the function"""
+
     def decorator_slow_down(func):
         @functools.wraps(func)
         def wrapper_slow_down(*args, **kwargs):
             time.sleep(slow_amount)
             return func(*args, **kwargs)
+
         return wrapper_slow_down
+
     if _func is None:
         return decorator_slow_down
     else:
