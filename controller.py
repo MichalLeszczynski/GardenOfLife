@@ -1,6 +1,6 @@
-from GroveSensor import GroveSensor
-from TemperatureHumiditySensor import TemperatureHumiditySensor as THSensor
-from ws281x import ws281x
+from sensors.GroveSensor import GroveSensor
+from sensors.TemperatureHumiditySensor import TemperatureHumiditySensor as THSensor
+from activators.ws281x import ws281x
 
 moisture_sensor = GroveSensor(4)
 print("Moisture: {}".format(moisture_sensor.value))

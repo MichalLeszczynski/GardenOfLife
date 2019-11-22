@@ -1,4 +1,4 @@
-from GpioController import GpioController
+from controllers.GpioController import GpioController
 
 
 class GpioPin:

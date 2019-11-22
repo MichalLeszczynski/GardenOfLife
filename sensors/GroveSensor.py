@@ -1,7 +1,8 @@
+from sensors.Sensor import Sensor
 from grove.adc import ADC
 
 
-class GroveSensor:
+class GroveSensor(Sensor):
     def __init__(self, channel):
         self.channel = channel
         self.adc = ADC()

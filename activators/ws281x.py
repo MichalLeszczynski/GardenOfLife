@@ -1,4 +1,6 @@
 import time
+
+from activators.Activator import Activator
 from neopixel import *
 import argparse
 
@@ -13,7 +15,7 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
-class ws281x:
+class ws281x(Activator):
     def __init__(self):
         self.strip = Adafruit_NeoPixel(
         LED_COUNT,
