@@ -47,18 +47,6 @@ class GpioController:
 
 open = decorators.debug(open)
 
-
-@decorators.timer
-@decorators.debug
-def pin_test(pin):
-    controller = GpioController()
-    for _ in range(20):
-        controller.on(pin)
-        time.sleep(0.2)
-        controller.off(pin)
-        time.sleep(0.2)
-
-
 if __name__ == "__main__":
 
     @decorators.timer

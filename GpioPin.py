@@ -1,9 +1,7 @@
 from GpioController import GpioController
 
-from GpioController import GpioController
 
 class GpioPin:
-
     def __init__(self, pin):
         self.controller = GpioController()
         self.pin = pin
