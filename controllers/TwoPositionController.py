@@ -11,4 +11,3 @@ class TwoPositionController:
             self.activator.off()
         elif current < self.wanted - self.hysteresis:
             self.activator.on()
-

@@ -1,6 +1,6 @@
 import os
 import time
-import decorators
+from other import decorators
 
 
 class GpioController:

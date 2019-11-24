@@ -1,9 +1,6 @@
-from activators.Activator import Activator
+from activators.RelayControlled import RelayControlled
 
 
-class Pump(Activator):
-    def on(self):
-        pass
-
-    def off(self):
-        pass
+class Pump(RelayControlled):
+    def __init__(self):
+        super(Pump, self).__init__(pin=21)

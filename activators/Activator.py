@@ -1,5 +1,4 @@
 class Activator:
-
     def on(self):
         pass
 

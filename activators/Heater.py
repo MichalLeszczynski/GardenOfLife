@@ -1,9 +1,6 @@
-from activators.Activator import Activator
+from activators.RelayControlled import RelayControlled
 
 
-class Heater(Activator):
-    def on(self):
-        pass
-
-    def off(self):
-        pass
+class Heater(RelayControlled):
+    def __init__(self):
+        super(Heater, self).__init__(pin=26)
