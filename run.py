@@ -37,13 +37,12 @@ temperature_controller = TwoPositionController(
 
 controllers = [moisture_controller, light_controller, temperature_controller]
 
+if __name__ == "__main__":
+    try:
+        while True:
+            for controller in controllers:
+                controller.update()
 
-try:
-    while True:
-        for controller in controllers:
-            controller.update()
-        time.sleep(0.5)
-
-except KeyboardInterrupt:
-    for activator in activators:
-        activator.off()
+    except KeyboardInterrupt:
+        for activator in activators:
+            activator.off()
