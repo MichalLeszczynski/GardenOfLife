@@ -43,8 +43,6 @@ class GpioController:
         return self.pin_dir(pin) + "/direction"
 
 
-open = decorators.debug(open)
-
 if __name__ == "__main__":
 
     @decorators.timer
