@@ -1,4 +1,4 @@
-import time
+import multiprocessing as mp
 
 from sensors.MoistureSensor import MoistureSensor
 from sensors.LightSensor import LightSensor
@@ -9,6 +9,12 @@ from activators.ws281x import ws281x
 from activators.Heater import Heater
 
 from controllers.TwoPositionController import TwoPositionController
+
+
+def run(controller):
+    while True:
+        controller.update()
+
 
 moisture_sensor = MoistureSensor()
 light_sensor = LightSensor()
@@ -39,9 +45,9 @@ controllers = [moisture_controller, light_controller, temperature_controller]
 
 if __name__ == "__main__":
     try:
-        while True:
-            for controller in controllers:
-                controller.update()
+
+        pool = mp.Pool(processes=3)
+        pool.map(run, controllers)
 
     except KeyboardInterrupt:
         for activator in activators:
