@@ -8,7 +8,9 @@ class RelayControlled(Activator):
         self.power = GpioPin(pin)
 
     def on(self):
+        super().on(self)
         self.power.on()
 
     def off(self):
+        super().off(self)
         self.power.off()

@@ -4,8 +4,8 @@ class Activator:
         self.is_on = False
 
     def on(self):
-        pass
+        self.is_on = True
 
     def off(self):
-        pass
+        self.is_on = False
 
