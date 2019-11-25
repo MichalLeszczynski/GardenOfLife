@@ -87,10 +87,10 @@ class ws281x(Activator):
                     self.strip.setPixelColor(i + q, 0)
 
     def on(self):
-        self.strip.colorWipe(Color(0, 0, 255), 10)
+        self.colorWipe(Color(0, 0, 255), 10)
 
     def off(self):
-        self.strip.colorWipe(Color(0, 0, 0), 10)
+        self.colorWipe(Color(0, 0, 0), 10)
 
 
 if __name__ == "__main__":

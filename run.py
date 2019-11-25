@@ -28,12 +28,12 @@ temperature_controller = TwoPositionController(temperature_sensor, heater, 24, 2
 
 controllers = [moisture_controller, light_controller, temperature_controller]
 
+if __name__ == "__main__":
+    try:
+        while True:
+            for controller in controllers:
+                controller.update()
 
-try:
-    while True:
-        for controller in controllers:
-            controller.update()
-
-except KeyboardInterrupt:
-    for activator in activators:
-        activator.off()
+    except KeyboardInterrupt:
+        for activator in activators:
+            activator.off()

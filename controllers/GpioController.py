@@ -8,12 +8,10 @@ class GpioController:
         self.gpio_path = "/sys/class/gpio/"
         self.export_path = self.gpio_path + "export"
 
-    @decorators.slow_down(0.2)
     def on(self, pin):
         self.initialize_pin(pin)
         self.set_value(pin, 1)
 
-    @decorators.slow_down(0.2)
     def off(self, pin):
         self.initialize_pin(pin)
         self.set_value(pin, 0)
@@ -21,7 +19,7 @@ class GpioController:
     def initialize_pin(self, pin):
         if not self.is_exported(pin):
             with open(self.export_path, "w") as export:
-                export.write(pin)
+                export.write(str(pin))
 
         if not self.is_set_to_out(pin):
             with open(self.direction(pin), "w") as direction:
