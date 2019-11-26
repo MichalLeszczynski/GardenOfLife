@@ -43,14 +43,18 @@ temperature_controller = TwoPositionController(
     temperature_humidity_sensor, heater, wanted=24, hysteresis=2, logging=logging
 )
 
-#controllers = [light_controller, moisture_controller, temperature_controller]
-controllers = [light_controller]
+controllers = [light_controller, moisture_controller, temperature_controller]
+#controllers = [light_controller]
 
 if __name__ == "__main__":
     try:
 
-        pool = mp.Pool(len(controllers))
-        pool.map(run, controllers)
+        #pool = mp.Pool(len(controllers))
+        #pool.map(run, controllers)
+        while True:
+            for controller in controllers:
+                controller.update()
+
 
     except KeyboardInterrupt:
         for activator in activators:
