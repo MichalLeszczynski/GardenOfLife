@@ -47,13 +47,14 @@ def debug(func):
 
 
 def slow_down(_func=None, *, slow_amount=1):
-    """Sleep <slow_amount> of seconds (1s by default) before calling the function"""
+    """Sleep <slow_amount> of seconds (1s by default) after calling the function"""
 
     def decorator_slow_down(func):
         @functools.wraps(func)
         def wrapper_slow_down(*args, **kwargs):
+            res = func(*args, **kwargs)
             time.sleep(slow_amount)
-            return func(*args, **kwargs)
+            return res
 
         return wrapper_slow_down
 

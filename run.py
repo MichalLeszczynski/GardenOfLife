@@ -12,8 +12,8 @@ from activators.Heater import Heater
 from controllers.TwoPositionController import TwoPositionController
 
 
-@slow_down(slow_amount=0.5)
 def run(controller):
+    print("Starting controller containing: {} and {}".format(controller.sensor.__class__.__name__, controller.activator.__class__.__name__))
     while True:
         controller.update()
 
@@ -43,12 +43,13 @@ temperature_controller = TwoPositionController(
     temperature_humidity_sensor, heater, wanted=24, hysteresis=2, logging=logging
 )
 
-controllers = [moisture_controller, light_controller, temperature_controller]
+#controllers = [light_controller, moisture_controller, temperature_controller]
+controllers = [light_controller]
 
 if __name__ == "__main__":
     try:
 
-        pool = mp.Pool(3)
+        pool = mp.Pool(len(controllers))
         pool.map(run, controllers)
 
     except KeyboardInterrupt:
