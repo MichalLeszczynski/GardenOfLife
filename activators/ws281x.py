@@ -17,7 +17,7 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 class ws281x(Activator):
     def __init__(self):
-        super(ws281x, self).__init__()
+        super().__init__()
         self.strip = Adafruit_NeoPixel(
             LED_COUNT,
             LED_PIN,
@@ -88,11 +88,11 @@ class ws281x(Activator):
                     self.strip.setPixelColor(i + q, 0)
 
     def on(self):
-        super().on(self)
+        super().on()
         self.colorWipe(Color(0, 0, 255), 10)
 
     def off(self):
-        super().off(self)
+        super().off()
         self.colorWipe(Color(0, 0, 0), 10)
 
 

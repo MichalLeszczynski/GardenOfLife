@@ -4,13 +4,13 @@ from controllers.GpioPin import GpioPin
 
 class RelayControlled(Activator):
     def __init__(self, pin):
-        super(RelayControlled, self).__init__()
+        super().__init__()
         self.power = GpioPin(pin)
 
     def on(self):
-        super().on(self)
+        super().on()
         self.power.on()
 
     def off(self):
-        super().off(self)
+        super().off()
         self.power.off()
