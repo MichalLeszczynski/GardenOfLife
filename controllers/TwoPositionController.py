@@ -23,7 +23,6 @@ class TwoPositionController:
         if current > self.wanted + self.hysteresis and self.activator.is_on:
             print("Setting {} OFF".format(self.activator.__class__.__name__))
             self.activator.off()
-        elif current < self.wanted - self.hysteresis  and not self.activator.is_on:
+        elif current < self.wanted - self.hysteresis and not self.activator.is_on:
             print("Setting {} ON".format(self.activator.__class__.__name__))
             self.activator.on()
-

@@ -1,5 +1,18 @@
 import functools
 import time
+from datetime import datetime
+
+
+def timestamped(func):
+    """Print the runtime of the decorated function"""
+
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        curr_time = datetime.now()
+        print("{}".format(curr_time), end=" ")
+        return func(*args, **kwargs)
+
+    return wrapper_timer
 
 
 def timer(func):

@@ -1,6 +1,6 @@
 import os
 import time
-from other import decorators
+from other.decorators import debug, timer
 
 
 class GpioController:
@@ -45,8 +45,8 @@ class GpioController:
 
 if __name__ == "__main__":
 
-    @decorators.timer
-    @decorators.debug
+    @timer
+    @debug
     def pin_test(pin):
         controller = GpioController()
         for _ in range(20):

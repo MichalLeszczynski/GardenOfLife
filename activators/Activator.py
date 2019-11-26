@@ -1,5 +1,4 @@
 class Activator:
-
     def __init__(self):
         self.is_on = False
 
@@ -8,4 +7,3 @@ class Activator:
 
     def off(self):
         self.is_on = False
-
