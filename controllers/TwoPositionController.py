@@ -1,6 +1,7 @@
 from datetime import datetime
 from other.decorators import slow_down
 
+
 class TwoPositionController:
     def __init__(self, sensor, activator, wanted, hysteresis, logging=False):
         self.sensor = sensor
@@ -22,8 +23,6 @@ class TwoPositionController:
                 data.write(record)
 
         if current > self.wanted + self.hysteresis and self.activator.is_on:
-            print("Setting {} OFF".format(self.activator.__class__.__name__))
             self.activator.off()
         elif current < self.wanted - self.hysteresis and not self.activator.is_on:
-            print("Setting {} ON".format(self.activator.__class__.__name__))
             self.activator.on()
