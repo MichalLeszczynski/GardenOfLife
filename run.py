@@ -49,7 +49,7 @@ controllers = [light_controller, moisture_controller, temperature_controller]
 relay = RelayPower()
 
 
-async def main():
+def main():
     try:
         relay.on()
 
