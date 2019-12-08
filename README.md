@@ -14,12 +14,13 @@ Temperature and Humidity Sensor | PWM
 
 Device                          | Pinned to
 -----                           | -----------
-Heater                          | Relay (Channel 1, pin 26)
 Pump                            | Relay (Channel 2, pin 21)
+Heater                          | Relay (Channel 3, pin 20)
 LED Matrix (ws281x)             | GND, VCC, pin18(PWM)
 
 ### Other
 
 Device                          | Pinned to
 -----                           | -----------
+Relay Power controller           | Relay (Channel 1, pin 26)
 LCD Display                     | I2C

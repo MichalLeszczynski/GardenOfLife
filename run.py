@@ -1,4 +1,3 @@
-import multiprocessing as mp
 from other.decorators import slow_down
 
 from sensors.MoistureSensor import MoistureSensor
@@ -8,6 +7,7 @@ from sensors.TemperatureHumiditySensor import TemperatureHumiditySensor
 from activators.Pump import Pump
 from activators.ws281x import ws281x
 from activators.Heater import Heater
+from activators.RelayPower import RelayPower
 
 from controllers.TwoPositionController import TwoPositionController
 
@@ -44,13 +44,12 @@ temperature_controller = TwoPositionController(
 )
 
 controllers = [light_controller, moisture_controller, temperature_controller]
-# controllers = [light_controller]
+
+relay = RelayPower()
 
 if __name__ == "__main__":
     try:
-
-        # pool = mp.Pool(len(controllers))
-        # pool.map(run, controllers)
+        relay.on()
         while True:
             for controller in controllers:
                 controller.update()
@@ -58,3 +57,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         for activator in activators:
             activator.off()
+            relay.off()
+

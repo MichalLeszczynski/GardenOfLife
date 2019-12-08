@@ -1,6 +1,6 @@
 from activators.RelayControlled import RelayControlled
 
 
-class Heater(RelayControlled):
+class RelayPower(RelayControlled):
     def __init__(self):
-        super().__init__(pin=20)
+        super().__init__(pin=26)
