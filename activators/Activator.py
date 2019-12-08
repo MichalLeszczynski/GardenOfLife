@@ -3,9 +3,9 @@ class Activator:
         self.is_on = False
 
     def on(self):
-        print("Setting {} OFF".format(self.__class__.__name__))
+        print("Setting {} ON".format(self.__class__.__name__))
         self.is_on = True
 
     def off(self):
-        print("Setting {} ON".format(self.__class__.__name__))
+        print("Setting {} OFF".format(self.__class__.__name__))
         self.is_on = False

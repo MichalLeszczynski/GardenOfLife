@@ -15,7 +15,7 @@ class TwoPositionController:
         current = self.sensor.value
 
         if self.logging:
-            with open("{}.dat".format(self.sensor.__class__.__name__), "a+") as data:
+            with open("data/{}.dat".format(self.sensor.__class__.__name__), "a+") as data:
                 time = datetime.now()
                 record = "{} {} {} {}\n".format(
                     time, current, self.wanted, self.hysteresis
