@@ -1,4 +1,4 @@
-from other.decorators import slow_down
+import asyncio
 
 from sensors.MoistureSensor import MoistureSensor
 from sensors.LightSensor import LightSensor
@@ -12,10 +12,11 @@ from activators.RelayPower import RelayPower
 from controllers.TwoPositionController import TwoPositionController
 
 
-def run(controller):
+async def run(controller):
     print("Starting controller containing: {} and {}".format(controller.sensor.__class__.__name__, controller.activator.__class__.__name__))
     while True:
         controller.update()
+        await asyncio.sleep(0.5)
 
 
 moisture_sensor = MoistureSensor()
@@ -47,15 +48,23 @@ controllers = [light_controller, moisture_controller, temperature_controller]
 
 relay = RelayPower()
 
-if __name__ == "__main__":
+
+async def main():
     try:
         relay.on()
-        while True:
-            for controller in controllers:
-                controller.update()
+
+        loop = asyncio.get_event_loop()
+
+        for controller in controllers:
+            loop.create_task(run(controller))
+
+        loop.run_forever()
 
     except KeyboardInterrupt:
         for activator in activators:
             activator.off()
-            relay.off()
+        relay.off()
 
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,4 @@
 from datetime import datetime
-from other.decorators import slow_down
 
 
 class TwoPositionController:
@@ -10,7 +9,6 @@ class TwoPositionController:
         self.hysteresis = hysteresis
         self.logging = logging
 
-    @slow_down(slow_amount=0.5)
     def update(self):
         current = self.sensor.value
 
