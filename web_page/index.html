@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Garden of Life</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+	<script src="canvasjs.min.js"></script>
+	<script>
+
+	window.onload = function ()
+	{
+		var dataPointsLight = [];
+		var dataPointsMoisture = [];
+		var dataPointsTempHumi = [];
+
+		var lightChart = new CanvasJS.Chart("lightChartContainer", {
+			backgroundColor: "#F5DEB3",
+			title: {
+				text: "Natężenie światła"
+			},
+			data: [{
+				type: "spline",
+				dataPoints: dataPointsLight
+			}]
+		});
+
+		var moistureSensorChart = new CanvasJS.Chart("moistureSensorChartContainer", {
+			backgroundColor: "#F5DEB3",
+			title: {
+				text: "Wilgotność gleby"
+			},
+			data: [{
+				type: "spline",
+				dataPoints: dataPointsMoisture
+			}]
+		});
+
+		var temperatureHumiditySensorChart = new CanvasJS.Chart("temperatureHumiditySensorChartContainer", {
+			backgroundColor: "#F5DEB3",
+			title: {
+				text: "Temperatura i wilgotność powietrza"
+			},
+			data: [{
+				type: "spline",
+				dataPoints: dataPointsTempHumi
+			}]
+		});
+
+		lightChart.render();
+		moistureSensorChart.render();
+		temperatureHumiditySensorChart.render();
+
+		var updateLightSensorData = function()
+		{
+			lightChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+			lightChart.render();
+		};
+
+		var updateMoistureSensorData = function()
+		{
+			moistureSensorChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+			moistureSensorChart.render();
+		};
+
+		var updateTemperatureHumiditySensorData = function()
+		{
+			temperatureHumiditySensorChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+			temperatureHumiditySensorChart.render();
+		};
+
+		setInterval(function()
+		{
+			updateLightSensorData();
+			updateMoistureSensorData();
+			updateTemperatureHumiditySensorData();
+		}, 1000);
+	}
+	</script>
+</head>
+<body>
+	<div class="chart" id="lightChartContainer"></div>
+	<div class="chart" id="moistureSensorChartContainer"></div>
+	<div class="chart" id="temperatureHumiditySensorChartContainer"></div>
+</body>
+</html>
