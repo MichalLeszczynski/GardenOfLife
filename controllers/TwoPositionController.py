@@ -2,12 +2,13 @@ from datetime import datetime
 
 
 class TwoPositionController:
-    def __init__(self, sensor, activator, wanted, hysteresis, logging=False):
+    def __init__(self, sensor, activator, wanted, hysteresis, logging=False, dry=False):
         self.sensor = sensor
         self.activator = activator
         self.wanted = wanted
         self.hysteresis = hysteresis
         self.logging = logging
+        self.dry = dry
 
     def update(self):
         current = self.sensor.value
@@ -20,7 +21,8 @@ class TwoPositionController:
                 )
                 data.write(record)
 
-        if current > self.wanted + self.hysteresis and self.activator.is_on:
-            self.activator.off()
-        elif current < self.wanted - self.hysteresis and not self.activator.is_on:
-            self.activator.on()
+        if not dry:
+            if current > self.wanted + self.hysteresis and self.activator.is_on:
+                self.activator.off()
+            elif current < self.wanted - self.hysteresis and not self.activator.is_on:
+                self.activator.on()

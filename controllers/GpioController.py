@@ -41,19 +41,3 @@ class GpioController:
 
     def direction(self, pin):
         return self.pin_dir(pin) + "/direction"
-
-
-if __name__ == "__main__":
-
-    @timer
-    @debug
-    def pin_test(pin):
-        controller = GpioController()
-        for _ in range(20):
-            controller.on(pin)
-            time.sleep(0.2)
-            controller.off(pin)
-            time.sleep(0.2)
-
-    pin = 25
-    pin_test(pin)

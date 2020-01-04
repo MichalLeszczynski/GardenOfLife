@@ -5,19 +5,23 @@ from sensors.LightSensor import LightSensor
 from sensors.TemperatureHumiditySensor import TemperatureHumiditySensor
 
 from activators.Pump import Pump
+from activators.PumpGND import PumpGND
 from activators.ws281x import ws281x
 from activators.Heater import Heater
 from activators.RelayPower import RelayPower
 
 from controllers.TwoPositionController import TwoPositionController
 
+
 from other.jhd1802 import JHD1802
+
 
 async def run(controller):
     print("Starting controller containing: {} and {}".format(controller.sensor.__class__.__name__, controller.activator.__class__.__name__))
     while True:
         controller.update()
         await asyncio.sleep(0.5)
+
 
 async def show_latest_info(sensors, lcd):
     while True:
@@ -46,19 +50,21 @@ light_controller = TwoPositionController(
     light_sensor, led, wanted=600, hysteresis=50, logging=logging
 )
 temperature_controller = TwoPositionController(
-    temperature_humidity_sensor, heater, wanted=24, hysteresis=2, logging=logging
+    temperature_humidity_sensor, heater, wanted=24, hysteresis=2, logging=logging, dry=True
 )
 
 controllers = [light_controller, moisture_controller, temperature_controller]
 
 relay = RelayPower()
+pump_gnd = PumpGND()
 
 lcd = JHD1802()
+
 
 def main():
     try:
         relay.on()
-
+        pump_gnd.on()
         loop = asyncio.get_event_loop()
 
         for controller in controllers:
@@ -70,6 +76,7 @@ def main():
         for activator in activators:
             activator.off()
         relay.off()
+        pump_gnd.off()
 
 
 if __name__ == "__main__":
