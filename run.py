@@ -11,6 +11,7 @@ from activators.RelayPower import RelayPower
 
 from controllers.TwoPositionController import TwoPositionController
 
+from other.jhd1802 import JHD1802
 
 async def run(controller):
     print("Starting controller containing: {} and {}".format(controller.sensor.__class__.__name__, controller.activator.__class__.__name__))
@@ -18,6 +19,10 @@ async def run(controller):
         controller.update()
         await asyncio.sleep(0.5)
 
+async def show_latest_info(sensors, lcd):
+    while True:
+        lcd.show_from_file(sensors)
+        await asyncio.sleep(0.5)
 
 moisture_sensor = MoistureSensor()
 light_sensor = LightSensor()
@@ -48,6 +53,7 @@ controllers = [light_controller, moisture_controller, temperature_controller]
 
 relay = RelayPower()
 
+lcd = JHD1802()
 
 def main():
     try:
@@ -57,7 +63,7 @@ def main():
 
         for controller in controllers:
             loop.create_task(run(controller))
-
+        loop.create_task(show_latest_info(sensors, lcd=lcd))
         loop.run_forever()
 
     except KeyboardInterrupt:
