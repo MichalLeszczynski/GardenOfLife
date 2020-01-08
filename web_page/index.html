@@ -11,70 +11,324 @@
 
 	window.onload = function ()
 	{
+		var i_global = -1;
+		var j_global = -1;
+		var k_global = -1;
+
+		var lastRowLight = "1";
+		var lastRowMoisture = "2";
+		var lastRowTemp = "3";
+
+		const MAX_CHART_LENGTH = 6;
+
 		var dataPointsLight = [];
+		var dataPointsLightError = [];
+		var dataPointsLightValues = [];
+		var dataPointsLightValuesError = [];
+		var dataPointsLightValuesDate = [];
+
 		var dataPointsMoisture = [];
+		var dataPointsMoistureError = [];
+		var dataPointsMoistureValues = [];
+		var dataPointsMoistureValuesError = [];
+		var dataPointsMoistureValuesDate = [];
+
 		var dataPointsTempHumi = [];
+		var dataPointsTempHumiError = [];
+		var dataPointsTempHumiValues = [];
+		var dataPointsTempHumiValuesError = [];
+		var dataPointsTempHumiValuesDate = [];
+
+		// var lightSensorFile = "home/ml/pi_data/data/LightSensor.dat";
+		// var moistureSensorFile = "home/ml/pi_data/data/MoistureSensor.dat";
+		// var temperatureHumiditySensorFile = "home/ml/pi_data/data/TemperatureHumiditySensor.dat";
+		var lightSensorFile = "LightSensor.dat";
+		var moistureSensorFile = "MoistureSensor.dat";
+		var temperatureHumiditySensorFile = "TemperatureHumiditySensor.dat";
 
 		var lightChart = new CanvasJS.Chart("lightChartContainer", {
-			backgroundColor: "#F5DEB3",
-			title: {
-				text: "Natężenie światła"
+			backgroundColor: "#e7f549",
+			axisY: {
+				maximum: 1200
 			},
-			data: [{
-				type: "spline",
-				dataPoints: dataPointsLight
-			}]
+			title: {
+				text: "Światło"
+			},
+			axisX: {
+				title: "Czas"
+			},
+			axisY:{
+				includeZero: false,
+				maximum: 1200
+			}, 
+			toolTip: {
+				shared: true
+			},
+			legend: {
+				cursor:"pointer",
+				verticalAlign: "top",
+				fontSize: 22,
+				fontColor: "dimGrey"
+				//itemclick : toggleDataSeries
+			},
+			data: [
+				{ 
+					type: "spline",
+					xValueType: "dateTime",
+					markerColor: "#05a5f5",
+					showInLegend: true,
+					name: "Natężenie światła",
+					dataPoints: dataPointsLight
+				},
+				{				
+					type: "spline",
+					xValueType: "dateTime",
+					showInLegend: true,
+					markerColor: "red",
+					name: "Błąd",
+					dataPoints: dataPointsLightError
+				}]
 		});
 
 		var moistureSensorChart = new CanvasJS.Chart("moistureSensorChartContainer", {
-			backgroundColor: "#F5DEB3",
+			backgroundColor: "#ffc517",
 			title: {
-				text: "Wilgotność gleby"
+				text: "Gleba"
 			},
-			data: [{
-				type: "spline",
-				dataPoints: dataPointsMoisture
-			}]
+			axisX: {
+				title: "Czas"
+			},
+			axisY:{
+				includeZero: false,
+				maximum: 1000
+			}, 
+			toolTip: {
+				shared: true
+			},
+			legend: {
+				cursor:"pointer",
+				verticalAlign: "top",
+				fontSize: 22,
+				fontColor: "dimGrey"
+			},
+			data: [
+				{ 
+					type: "spline",
+					xValueType: "dateTime",
+					markerColor: "#05a5f5",
+					showInLegend: true,
+					name: "Wilgotność",
+					dataPoints: dataPointsMoisture
+				},
+				{				
+					type: "spline",
+					xValueType: "dateTime",
+					markerColor: "red",
+					showInLegend: true,
+					name: "Błąd",
+					dataPoints: dataPointsMoistureError
+				}]
 		});
 
 		var temperatureHumiditySensorChart = new CanvasJS.Chart("temperatureHumiditySensorChartContainer", {
-			backgroundColor: "#F5DEB3",
+			backgroundColor: "#ffa570",
 			title: {
-				text: "Temperatura i wilgotność powietrza"
+				text: "Temperatura"
 			},
-			data: [{
-				type: "spline",
-				dataPoints: dataPointsTempHumi
-			}]
+			axisX: {
+				title: "Czas"
+			},
+			axisY:{
+				includeZero: false,
+				maximum: 50
+			}, 
+			toolTip: {
+				shared: true
+			},
+			legend: {
+				cursor:"pointer",
+				verticalAlign: "top",
+				fontSize: 22,
+				fontColor: "dimGrey"
+			},
+			data: [
+				{ 
+					type: "spline",
+					xValueType: "dateTime",
+					markerColor: "#05a5f5",
+					showInLegend: true,
+					name: "Wartości",
+					dataPoints: dataPointsTempHumi
+				},
+				{				
+					type: "spline",
+					xValueType: "dateTime",
+					showInLegend: true,
+					markerColor: "red",
+					name: "Błąd",
+					dataPoints: dataPointsTempHumiError
+				}]
 		});
 
 		lightChart.render();
 		moistureSensorChart.render();
 		temperatureHumiditySensorChart.render();
 
-		var updateLightSensorData = function()
+	    var isRowPushed = false;
+
+		var parseLightFile = function()
 		{
-			lightChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+		    // jQuery.get('trash.txt', function(data)
+		    jQuery.get(lightSensorFile, function(data)
+		    {
+			    var lines = data.split("\n");
+			    var len = lines.length;
+    			var row = lines[len - 2].split(" ");
+
+    			if(row[1].localeCompare(lastRowLight) != 0)
+    			{
+	        		dataPointsLightValuesDate.push(row[1]);
+	        		dataPointsLightValues.push(row[2]);
+	        		dataPointsLightValuesError.push(Math.abs(row[2] - row[3]));
+
+	        		i_global++;
+        			lastRowLight = row[1];
+
+        			isRowPushed = true;
+	        	}
+	        	else
+	        	{
+	        		isRowPushed = false;
+	        	}
+			});
+		};
+
+		var parseMoistureFile = function()
+		{
+		    // jQuery.get('trash1.txt', function(data)
+			jQuery.get(moistureSensorFile, function(data)
+		    {
+			    var lines = data.split("\n");
+			    var len = lines.length;
+    			var row = lines[len - 2].split(" ");
+
+				if(row[1].localeCompare(lastRowMoisture) != 0)
+    			{
+	        		dataPointsMoistureValuesDate.push(row[1]);
+	        		dataPointsMoistureValues.push(row[2]);
+	        		dataPointsMoistureValuesError.push(Math.abs(row[2] - row[3]));
+
+	        		j_global++;
+        			lastRowMoisture = row[1];
+
+        			isRowPushed = true;
+	        	}
+	        	else
+	        	{
+	        		isRowPushed = false;
+	        	}
+			});
+		};
+
+		var parseTempFile = function()
+		{
+		    // jQuery.get('trash2.txt', function(data)
+			jQuery.get(temperatureHumiditySensorFile, function(data)
+		    {
+			    var lines = data.split("\n");
+			    var len = lines.length;
+    			var row = lines[len - 2].split(" ");
+
+				if(row[1].localeCompare(lastRowTemp) != 0)
+    			{
+	        		dataPointsTempHumiValuesDate.push(row[1]);
+	        		dataPointsTempHumiValues.push(row[2]);
+	        		dataPointsTempHumiValuesError.push(Math.abs(row[2] - row[3]));
+
+	        		k_global++;
+        			lastRowTemp = row[1];
+
+        			isRowPushed = true;
+	        	}
+	        	else
+	        	{
+	        		isRowPushed = false;
+	        	}
+			});
+		};
+
+		var updateLightSensorData = function(ddd)
+		{
+			dataPointsLight.push({ x: ddd, y: parseInt(dataPointsLightValues[i_global])});
+        	dataPointsLightError.push({ x: ddd,  y: dataPointsLightValuesError[i_global]});
+
+			if(dataPointsLight.length > MAX_CHART_LENGTH)
+			{
+				dataPointsLight.shift();
+				dataPointsLightError.shift();
+			}
+
 			lightChart.render();
 		};
 
-		var updateMoistureSensorData = function()
+		var updateMoistureSensorData = function(ddd)
 		{
-			moistureSensorChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+			dataPointsMoisture.push({ x: ddd, y: parseInt(dataPointsMoistureValues[j_global])});
+        	dataPointsMoistureError.push({ x: ddd,  y: dataPointsMoistureValuesError[j_global]});
+
+			if(dataPointsMoisture.length > MAX_CHART_LENGTH)
+			{
+				dataPointsMoisture.shift();
+				dataPointsMoistureError.shift();
+			}
+
 			moistureSensorChart.render();
 		};
 
-		var updateTemperatureHumiditySensorData = function()
+		var updateTemperatureHumiditySensorData = function(ddd)
 		{
-			temperatureHumiditySensorChart.options.data[0].dataPoints.push({ y: 25 - Math.random() * 10});
+			dataPointsTempHumi.push({ x: ddd, y: parseInt(dataPointsTempHumiValues[k_global])});
+        	dataPointsTempHumiError.push({ x: ddd,  y: dataPointsTempHumiValuesError[k_global]});
+
+			if(dataPointsTempHumi.length > MAX_CHART_LENGTH)
+			{
+				dataPointsTempHumi.shift();
+				dataPointsTempHumiError.shift();
+			}
+
 			temperatureHumiditySensorChart.render();
 		};
 
 		setInterval(function()
 		{
-			updateLightSensorData();
-			updateMoistureSensorData();
-			updateTemperatureHumiditySensorData();
+			var now     = new Date(); 
+	        var year    = now.getFullYear();
+	        var month   = now.getMonth(); 
+	        var day     = now.getDate();
+	        var hour    = now.getHours();
+	        var minute  = now.getMinutes();
+	        var second  = now.getSeconds();
+
+	        var ddd = new Date(year, month, day, hour, minute, second);
+
+	        parseLightFile();
+	        if(isRowPushed)
+	        {
+				updateLightSensorData(ddd);
+	        }
+
+	        parseMoistureFile();
+			if(isRowPushed)
+	        {
+				updateMoistureSensorData(ddd);
+			}
+
+			parseTempFile();
+			if(isRowPushed)
+	        {
+				updateTemperatureHumiditySensorData(ddd);
+			}
+
 		}, 1000);
 	}
 	</script>
@@ -83,5 +337,6 @@
 	<div class="chart" id="lightChartContainer"></div>
 	<div class="chart" id="moistureSensorChartContainer"></div>
 	<div class="chart" id="temperatureHumiditySensorChartContainer"></div>
+	<p id="container"></p>
 </body>
 </html>
