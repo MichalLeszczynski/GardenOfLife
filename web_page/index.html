@@ -14,49 +14,40 @@
 		var i_global = -1;
 		var j_global = -1;
 		var k_global = -1;
+		var l_global = -1;
 
 		var lastRowLight = "1";
 		var lastRowMoisture = "2";
 		var lastRowTemp = "3";
+		var lastRowHumi = "4";
 
 		const MAX_CHART_LENGTH = 10000;
 
 		var dataPointsLight = [];
-		var dataPointsLightError = [];
 		var dataPointsLightValues = [];
-		var dataPointsLightValuesError = [];
 		var dataPointsLightValuesDate = [];
 
 		var dataPointsMoisture = [];
-		var dataPointsMoistureError = [];
 		var dataPointsMoistureValues = [];
-		var dataPointsMoistureValuesError = [];
 		var dataPointsMoistureValuesDate = [];
 
 		var dataPointsTemp = [];
-		var dataPointsTempError = [];
 		var dataPointsTempValues = [];
-		var dataPointsTempValuesError = [];
 		var dataPointsTempValuesDate = [];
 
 		var dataPointsHumi = [];
-		var dataPointsHumiError = [];
 		var dataPointsHumiValues = [];
-		var dataPointsHumiValuesError = [];
 		var dataPointsHumiValuesDate = [];
 
-		// var lightSensorFile = "home/ml/pi_data/data/LightSensor.dat";
-		// var moistureSensorFile = "home/ml/pi_data/data/MoistureSensor.dat";
-		// var temperatureHumiditySensorFile = "home/ml/pi_data/data/TemperatureHumiditySensor.dat";
-		var lightSensorFile = "LightSensor.dat";
-		var moistureSensorFile = "MoistureSensor.dat";
-		var temperatureSensorFile = "TemperatureSensor.dat";
-		var humiditySensorFile = "HumiditySensor.dat";
+		var lightSensorFile = "data/LightSensor.dat";
+		var moistureSensorFile = "data/MoistureSensor.dat";
+		var temperatureSensorFile = "data/TemperatureSensor.dat";
+		var humiditySensorFile = "data/HumiditySensor.dat";
 
 		var lightChart = new CanvasJS.Chart("lightChartContainer", {
 			backgroundColor: "#e7f549",
 			axisY: {
-				maximum: 1200
+				maximum: 2000
 			},
 			title: {
 				text: "Światło"
@@ -66,7 +57,7 @@
 			},
 			axisY:{
 				includeZero: false,
-				maximum: 1200
+				maximum: 2000
 			}, 
 			toolTip: {
 				shared: true
@@ -86,14 +77,6 @@
 					showInLegend: true,
 					name: "Natężenie światła",
 					dataPoints: dataPointsLight
-				},
-				{				
-					type: "spline",
-					xValueType: "dateTime",
-					showInLegend: true,
-					markerColor: "red",
-					name: "Błąd",
-					dataPoints: dataPointsLightError
 				}]
 		});
 
@@ -107,7 +90,7 @@
 			},
 			axisY:{
 				includeZero: false,
-				maximum: 1000
+				maximum: 3000
 			}, 
 			toolTip: {
 				shared: true
@@ -126,14 +109,6 @@
 					showInLegend: true,
 					name: "Wilgotność",
 					dataPoints: dataPointsMoisture
-				},
-				{				
-					type: "spline",
-					xValueType: "dateTime",
-					markerColor: "red",
-					showInLegend: true,
-					name: "Błąd",
-					dataPoints: dataPointsMoistureError
 				}]
 		});
 
@@ -166,21 +141,13 @@
 					showInLegend: true,
 					name: "Wartości",
 					dataPoints: dataPointsTemp
-				},
-				{				
-					type: "spline",
-					xValueType: "dateTime",
-					showInLegend: true,
-					markerColor: "red",
-					name: "Błąd",
-					dataPoints: dataPointsTempError
 				}]
 		});
 
 		var humiditySensorChart = new CanvasJS.Chart("humiditySensorChartContainer", {
-			backgroundColor: "#ffa570",
+			backgroundColor: "#ffa585",
 			title: {
-				text: "Wilgotność"
+				text: "Wilgotność powietrza"
 			},
 			axisX: {
 				title: "Czas"
@@ -206,14 +173,6 @@
 					showInLegend: true,
 					name: "Wartości",
 					dataPoints: dataPointsHumi
-				},
-				{
-					type: "spline",
-					xValueType: "dateTime",
-					showInLegend: true,
-					markerColor: "red",
-					name: "Błąd",
-					dataPoints: dataPointsHumiError
 				}]
 		});
 
@@ -226,7 +185,6 @@
 
 		var parseLightFile = function()
 		{
-		    // jQuery.get('trash.txt', function(data)
 		    jQuery.get(lightSensorFile, function(data)
 		    {
 			    var lines = data.split("\n");
@@ -237,7 +195,6 @@
     			{
 	        		dataPointsLightValuesDate.push(row[1]);
 	        		dataPointsLightValues.push(row[2]);
-	        		dataPointsLightValuesError.push(Math.abs(row[2] - row[3]));
 
 	        		i_global++;
         			lastRowLight = row[1];
@@ -253,7 +210,6 @@
 
 		var parseMoistureFile = function()
 		{
-		    // jQuery.get('trash1.txt', function(data)
 			jQuery.get(moistureSensorFile, function(data)
 		    {
 			    var lines = data.split("\n");
@@ -264,7 +220,6 @@
     			{
 	        		dataPointsMoistureValuesDate.push(row[1]);
 	        		dataPointsMoistureValues.push(row[2]);
-	        		dataPointsMoistureValuesError.push(Math.abs(row[2] - row[3]));
 
 	        		j_global++;
         			lastRowMoisture = row[1];
@@ -290,7 +245,6 @@
     			{
 	        		dataPointsTempValuesDate.push(row[1]);
 	        		dataPointsTempValues.push(row[2]);
-	        		dataPointsTempValuesError.push(Math.abs(row[2] - row[3]));
 
 	        		k_global++;
         			lastRowTemp = row[1];
@@ -312,14 +266,13 @@
 			    var len = lines.length;
     			var row = lines[len - 2].split(" ");
 
-				if(row[1].localeCompare(lastRowTemp) != 0)
+				if(row[1].localeCompare(lastRowHumi) != 0)
     			{
 	        		dataPointsHumiValuesDate.push(row[1]);
 	        		dataPointsHumiValues.push(row[2]);
-	        		dataPointsHumiValuesError.push(Math.abs(row[2] - row[3]));
 
-	        		k_global++;
-        			lastRowTemp = row[1];
+	        		l_global++;
+        			lastRowHumi = row[1];
 
         			isRowPushed = true;
 	        	}
@@ -333,12 +286,10 @@
 		var updateLightSensorData = function(ddd)
 		{
 			dataPointsLight.push({ x: ddd, y: parseInt(dataPointsLightValues[i_global])});
-        	dataPointsLightError.push({ x: ddd,  y: dataPointsLightValuesError[i_global]});
 
 			if(dataPointsLight.length > MAX_CHART_LENGTH)
 			{
 				dataPointsLight.shift();
-				dataPointsLightError.shift();
 			}
 
 			lightChart.render();
@@ -347,12 +298,10 @@
 		var updateMoistureSensorData = function(ddd)
 		{
 			dataPointsMoisture.push({ x: ddd, y: parseInt(dataPointsMoistureValues[j_global])});
-        	dataPointsMoistureError.push({ x: ddd,  y: dataPointsMoistureValuesError[j_global]});
 
 			if(dataPointsMoisture.length > MAX_CHART_LENGTH)
 			{
 				dataPointsMoisture.shift();
-				dataPointsMoistureError.shift();
 			}
 
 			moistureSensorChart.render();
@@ -361,12 +310,10 @@
 		var updateTemperatureSensorData = function(ddd)
 		{
 			dataPointsTemp.push({ x: ddd, y: parseInt(dataPointsTempValues[k_global])});
-        	dataPointsTempError.push({ x: ddd,  y: dataPointsTempValuesError[k_global]});
 
 			if(dataPointsTemp.length > MAX_CHART_LENGTH)
 			{
 				dataPointsTemp.shift();
-				dataPointsTempError.shift();
 			}
 
 			temperatureSensorChart.render();
@@ -374,13 +321,11 @@
 
 		var updateHumiditySensorData = function(ddd)
 		{
-			dataPointsHumi.push({ x: ddd, y: parseInt(dataPointsHumiValues[k_global])});
-        	dataPointsHumiError.push({ x: ddd,  y: dataPointsHumiValuesError[k_global]});
+			dataPointsHumi.push({ x: ddd, y: parseInt(dataPointsHumiValues[l_global])});
 
 			if(dataPointsHumi.length > MAX_CHART_LENGTH)
 			{
 				dataPointsHumi.shift();
-				dataPointsHumiError.shift();
 			}
 
 			humiditySensorChart.render();
@@ -406,22 +351,22 @@
 	        }
 
 	        parseMoistureFile();
-			if(isRowPushed)
+		if(isRowPushed)
 	        {
-				updateMoistureSensorData(ddd);
-			}
+			updateMoistureSensorData(ddd);
+		}
 
-			parseTempFile();
-			if(isRowPushed)
+		parseTempFile();
+		if(isRowPushed)
 	        {
-				updateTemperatureSensorData(ddd);
-			}
+			updateTemperatureSensorData(ddd);
+		}
 
-			parseHumiFile();
-			if(isRowPushed)
+		parseHumiFile();
+		if(isRowPushed)
 	        {
-				updateHumiditySensorData(ddd);
-			}
+			updateHumiditySensorData(ddd);
+		}
 
 		}, 1000);
 	}
