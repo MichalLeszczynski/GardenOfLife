@@ -46,17 +46,22 @@ class JHD1802(Display):
             self.jhd.cursorOff()
 
     def show_from_file(self, sensors):
-        self.clear()
-        info = ""
+        all_info = ""
+        line_1 = ""
+        line_2 = ""
         i = 0
         for sensor in sensors:
             name = sensor.__class__.__name__
             with open("data/{}.dat".format(name)) as file:
-                info += "{}:{} ".format(str(name[0][0]), file.readlines()[-1].split(" ")[2] )
-            if i == 2: # go to a new line in display after displaying data from 2 sensors
-                self.write(info)
-                info = ""
-                self.setCursor(1, 0)
+                tmp_info = "{}:{:4d} ".format(str(name[0][0]), int(file.readlines()[-1].split(" ")[2]) )
+                all_info += tmp_info
+            if i < 2: # go to a new line in display after displaying data from 2 sensors
+                line_1 += tmp_info
+            else:
+                line_2 += tmp_info 
             i += 1
-        print(info)
-        self.write(info)
+        print(all_info)
+        self.clear()
+        self.write(line_1)
+        self.setCursor(1,0)
+        self.write(line_2)
