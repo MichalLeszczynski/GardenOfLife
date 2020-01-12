@@ -21,7 +21,4 @@ class TemperatureHumiditySensor(Sensor):
     def humidity(self):
         return self.read[0]
 
-    @property
-    def value(self):
-        self.read_values()
-        return self.temperature
+

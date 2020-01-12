@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class TwoPositionController:
-    def __init__(self, sensor, activator, wanted, hysteresis, logging=False, dry=False):
+    def __init__(self, sensor, activator=None, wanted=0, hysteresis=0, logging=False, dry=False):
         self.sensor = sensor
         self.activator = activator
         self.wanted = wanted

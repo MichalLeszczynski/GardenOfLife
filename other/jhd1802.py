@@ -47,10 +47,16 @@ class JHD1802(Display):
 
     def show_from_file(self, sensors):
         info = ""
+        i = 0
         for sensor in sensors:
             name = sensor.__class__.__name__
             with open("data/{}.dat".format(name)) as file:
-                info += "{}:{}".format(str(name[0][0]), file.readlines()[-1].split(" ")[2] ) 
+                info += "{}:{} ".format(str(name[0][0]), file.readlines()[-1].split(" ")[2] )
+            if i == 2: # go to a new line in display after displaying data from 2 sensors
+                self.write(info)
+                info = ""
+                self.setCursor(1, 0)
+            i += 1
         print(info)
         self.clear()
         self.write(info)

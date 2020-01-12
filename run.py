@@ -2,7 +2,8 @@ import asyncio
 
 from sensors.MoistureSensor import MoistureSensor
 from sensors.LightSensor import LightSensor
-from sensors.TemperatureHumiditySensor import TemperatureHumiditySensor
+from sensors.TemperatureSensor import TemperatureSensor
+from sensors.HumiditySensor import HumiditySensor
 
 from activators.Pump import Pump
 from activators.PumpGND import PumpGND
@@ -30,9 +31,10 @@ async def show_latest_info(sensors, lcd):
 
 moisture_sensor = MoistureSensor()
 light_sensor = LightSensor()
-temperature_humidity_sensor = TemperatureHumiditySensor()
+temperature_sensor = TemperatureSensor()
+humidity_sensor = HumiditySensor()
 
-sensors = [moisture_sensor, light_sensor, temperature_humidity_sensor]
+sensors = [moisture_sensor, light_sensor, temperature_sensor, humidity_sensor]
 
 
 pump = Pump()
@@ -50,10 +52,14 @@ light_controller = TwoPositionController(
     light_sensor, led, wanted=600, hysteresis=50, logging=logging
 )
 temperature_controller = TwoPositionController(
-    temperature_humidity_sensor, heater, wanted=24, hysteresis=2, logging=logging, dry=True
+    temperature_sensor, heater, wanted=24, hysteresis=2, logging=logging, dry=True
 )
 
-controllers = [light_controller, moisture_controller, temperature_controller]
+humidity_controller = TwoPositionController(
+    humidity_sensor, logging=logging, dry=True
+)
+
+controllers = [light_controller, moisture_controller, temperature_controller, humidity_controller]
 
 relay = RelayPower()
 pump_gnd = PumpGND()
