@@ -50,7 +50,7 @@ class JHD1802(Display):
         for sensor in sensors:
             name = sensor.__class__.__name__
             with open("data/{}.dat".format(name)) as file:
-                info += "{}:{} ".format(str(name[0][0]), file.readlines()[-1].split(" ")[2] ) 
+                info += "{}:{}".format(str(name[0][0]), file.readlines()[-1].split(" ")[2] ) 
         print(info)
         self.clear()
         self.write(info)

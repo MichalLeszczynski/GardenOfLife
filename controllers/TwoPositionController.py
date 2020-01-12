@@ -21,7 +21,7 @@ class TwoPositionController:
                 )
                 data.write(record)
 
-        if not dry:
+        if not self.dry:
             if current > self.wanted + self.hysteresis and self.activator.is_on:
                 self.activator.off()
             elif current < self.wanted - self.hysteresis and not self.activator.is_on:
