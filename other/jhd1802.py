@@ -46,6 +46,7 @@ class JHD1802(Display):
             self.jhd.cursorOff()
 
     def show_from_file(self, sensors):
+        self.clear()
         info = ""
         i = 0
         for sensor in sensors:
@@ -58,5 +59,4 @@ class JHD1802(Display):
                 self.setCursor(1, 0)
             i += 1
         print(info)
-        self.clear()
         self.write(info)
