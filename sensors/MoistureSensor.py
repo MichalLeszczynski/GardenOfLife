@@ -1,6 +1,6 @@
-from sensors.GroveSensor import GroveSensor
+from sensors.GroveADCSensor import GroveADCSensor
 
 
-class MoistureSensor(GroveSensor):
+class MoistureSensor(GroveADCSensor):
     def __init__(self):
         super(MoistureSensor, self).__init__(channel=4)
